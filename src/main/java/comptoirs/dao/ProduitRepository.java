@@ -12,7 +12,6 @@ import comptoirs.dto.UnitesParProduit;
 public interface ProduitRepository extends JpaRepository<Produit, Integer> {
 	/**
 	 * Calcule le nombre d'unités vendues pour chaque produit d'une catégorie donnée.
-	 * pas d'utilisation de DTO
 	 * @param codeCategorie la catégorie à traiter
 	 * @return le nombre d'unités vendus pour chaque produit, 
 	 *		sous la forme d'une liste de DTO UnitesParProduit

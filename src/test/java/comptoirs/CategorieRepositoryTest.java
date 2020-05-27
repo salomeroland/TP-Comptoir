@@ -30,10 +30,10 @@ class CategorieRepositoryTest {
 
 	@Test
 	@Sql("small_data.sql")
-	void compterLesEntites() throws JsonProcessingException {
+	void compterLesEntites() {
 		logger.debug("Compter les entités");
 
-		long nombre = dao.count(); // 'count' donne le nombre d'enreigstrements
+		long nombre = dao.count(); // 'count' donne le nombre d'enregistrements
 
 		assertEquals(2, nombre, "Le jeu de test contient 2 catégories");
 	}

@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.github.bastide</groupId>
-	<artifactId>comptoirsDataAccessLayer</artifactId>
+	<artifactId>comptoirsSpringJPA</artifactId>
 	<version>1.0</version>
-	<name>comptoirsDataAccessLayer</name>
+	<name>comptoirsSpringJPA</name>
 	<description>Exemples Spring JPA sur la base "comptoirs"</description>
 
 	<properties>

@@ -12,20 +12,17 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * Un repository avec des méthodes de recherche spécifiques, auto-implémentées par Spring
  */
 
-public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
-	
+public interface CategorieRepository extends JpaRepository<Categorie, Integer> {	
 	/**
 	 * Recherche une catégorie par son libellé (unique)
 	 * @param libelle le libellé recherché
 	 * @return Une catégorie avec ce libellé
 	 */
-	Categorie findByLibelle(String libelle);
-	
+	Categorie findByLibelle(String libelle);	
 	/**
 	 * Recherche les catégories dont le libellé contient une sous-chaine
 	 * @param substring la sous-chaine à rechercher dans le libellé
 	 * @return la liste des catégories dont le libellé contient substring
 	 */
 	List<Categorie> findByLibelleContaining(String substring);
-
 }
