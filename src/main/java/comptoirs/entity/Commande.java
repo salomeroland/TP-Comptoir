@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package comptoirs.entity;
 
 import java.io.Serializable;
@@ -28,10 +23,6 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-/**
- *
- * @author rbastide
- */
 @Entity
 @XmlRootElement
 @NamedQueries({
@@ -51,14 +42,14 @@ public class Commande implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Basic(optional = false)
-        @Column(nullable = false)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Basic(optional = false)
+	@Column(nullable = false)
 	private Integer numero;
 	@Basic(optional = false)
-        @NotNull
-        @Column(nullable = false)
-        @Temporal(TemporalType.DATE)
+	@NotNull
+	@Column(nullable = false)
+	@Temporal(TemporalType.DATE)
 	private Date saisiele;
 	@Temporal(TemporalType.DATE)
 	private Date envoyeele;
@@ -66,31 +57,31 @@ public class Commande implements Serializable {
 	@Column(precision = 18, scale = 2)
 	private BigDecimal port;
 	@Size(max = 40)
-        @Column(length = 40)
+	@Column(length = 40)
 	private String destinataire;
 	@Size(max = 60)
-        @Column(name = "ADRESSE_LIVRAISON", length = 60)
+	@Column(name = "ADRESSE_LIVRAISON", length = 60)
 	private String adresseLivraison;
 	@Size(max = 15)
-        @Column(name = "VILLE_LIVRAISON", length = 15)
+	@Column(name = "VILLE_LIVRAISON", length = 15)
 	private String villeLivraison;
 	@Size(max = 15)
-        @Column(name = "REGION_LIVRAISON", length = 15)
+	@Column(name = "REGION_LIVRAISON", length = 15)
 	private String regionLivraison;
 	@Size(max = 10)
-        @Column(name = "CODE_POSTAL_LIVRAISON", length = 10)
+	@Column(name = "CODE_POSTAL_LIVRAISON", length = 10)
 	private String codePostalLivraison;
 	@Size(max = 15)
-        @Column(name = "PAYS_LIVRAISON", length = 15)
+	@Column(name = "PAYS_LIVRAISON", length = 15)
 	private String paysLivraison;
 	@Basic(optional = false)
-        @NotNull
-        @Column(nullable = false, precision = 10, scale = 2)
+	@NotNull
+	@Column(nullable = false, precision = 10, scale = 2)
 	private BigDecimal remise;
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "commande")
 	private List<Ligne> ligneList;
 	@JoinColumn(name = "CLIENT", referencedColumnName = "CODE", nullable = false)
-        @ManyToOne(optional = false)
+	@ManyToOne(optional = false)
 	private Client client;
 
 	public Commande() {
@@ -235,5 +226,5 @@ public class Commande implements Serializable {
 	public String toString() {
 		return "comptoirs.entity.Commande[ numero=" + numero + " ]";
 	}
-	
+
 }

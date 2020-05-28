@@ -21,9 +21,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 @Entity
+@XmlRootElement
 @Table(uniqueConstraints = {
 	@UniqueConstraint(columnNames = {"LIBELLE"})})
-@XmlRootElement
 @NamedQueries({
 	@NamedQuery(name = "Categorie.findAll", query = "SELECT c FROM Categorie c"),
 	@NamedQuery(name = "Categorie.findByCode", query = "SELECT c FROM Categorie c WHERE c.code = :code"),
