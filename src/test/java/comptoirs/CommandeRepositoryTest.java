@@ -22,9 +22,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 class CommandeRepositoryTest {
 	Logger logger = LoggerFactory.getLogger(CommandeRepositoryTest.class);
 	
-	@Autowired
-	EntityManager em;
-	
 	@Autowired 
 	private CommandeRepository daoCommande;
 
@@ -67,7 +64,7 @@ class CommandeRepositoryTest {
 		daoCommande.save(nouvelle);
 				
 		// On regarde si ça s'est bien passé
-		assertEquals(5, daoLigne.findAll().size(),   "Il doit y avoir 5 lignes en tout");
+		assertEquals(5, daoLigne.count(),   "Il doit y avoir 5 lignes en tout");
 		assertEquals(3, chang.getLigneList().size(), "Il doit y avoir 3 lignes pour le produit 'Chang')");
 		assertEquals(2, syrup.getLigneList().size(), "Il doit y avoir 2 lignes pour le produit 'Syrup')");
 		assertTrue(chang.getLigneList().contains(l2), "La nouvelle ligne doit avoir été ajoutée au produit 'chang'");
