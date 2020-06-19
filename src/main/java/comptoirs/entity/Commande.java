@@ -78,7 +78,7 @@ public class Commande implements Serializable {
 	@NotNull
 	@Column(nullable = false, precision = 10, scale = 2)
 	private BigDecimal remise;
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "commande")
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "commande", orphanRemoval = true)
 	private List<Ligne> ligneList;
 	@JoinColumn(name = "CLIENT", referencedColumnName = "CODE", nullable = false)
 	@ManyToOne(optional = false)
