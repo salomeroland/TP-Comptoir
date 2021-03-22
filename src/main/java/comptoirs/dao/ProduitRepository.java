@@ -18,8 +18,8 @@ public interface ProduitRepository extends JpaRepository<Produit, Integer> {
 	 */	
 	@Query("SELECT p.nom as nom, SUM(li.quantite) AS unites "
 		+ "FROM Categorie c "
-		+ "JOIN c.produitList p "
-		+ "JOIN p.ligneList li "
+		+ "JOIN c.produits p "
+		+ "JOIN p.lignes li "
 		+ "WHERE c.code = :codeCategorie "
 		+ "GROUP BY p.nom ")
 	public List<UnitesParProduit> produitsVendusPour(Integer codeCategorie);
@@ -33,10 +33,10 @@ public interface ProduitRepository extends JpaRepository<Produit, Integer> {
 	 */	
 	@Query("SELECT p.nom, SUM(li.quantite) "
 		+ "FROM Categorie c "
-		+ "JOIN c.produitList p "
-		+ "JOIN p.ligneList li "
+		+ "JOIN c.produits p "
+		+ "JOIN p.lignes li "
 		+ "WHERE c.code = :codeCategorie "
 		+ "GROUP BY p.nom ")
-	public List produitsVendusPourV2(Integer codeCategorie);
+	public List<Object> produitsVendusPourV2(Integer codeCategorie);
 
 }

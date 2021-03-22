@@ -52,7 +52,7 @@ public class EntityManagerTest {
 		List<Produit> produits = new ArrayList<>();
 		produits.add(p1);
 		produits.add(p2);
-		cat.setProduitList(produits);
+		cat.setProduits(produits);
 		logger.info("On enregistre la catégorie et ses 2 produits");
 		em.persist(cat);
 		long produitsAprès = dao.count();
@@ -67,7 +67,7 @@ public class EntityManagerTest {
 		logger.debug("Recherche catégorie avec produits");
 		// Recherche par clé
 		Categorie cat = em.find(Categorie.class, 1);
-		List<Produit> produits = cat.getProduitList();
+		List<Produit> produits = cat.getProduits();
 		// On a chargé également tous les produits de cette catégorie
 		assertEquals(2, produits.size(), "La catégorie 1 a 2 produits dans le jeu de test");
 	}

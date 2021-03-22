@@ -33,7 +33,8 @@ class ClientRepositoryTest {
 		// On cherche le client BONAP d'après sa clé
 		Client bonap  = daoClient.getOne("BONAP");
 		// On vérifie qu'il a des commandes
-		assertFalse(bonap.getCommandeList().isEmpty());
+		assertFalse(bonap.getCommandes().isEmpty(),
+			"Le client BONAP a des commandes");
 	}
 	
 	@Test

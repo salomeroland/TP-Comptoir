@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -54,28 +54,29 @@ class CommandeRepositoryTest {
 		Commande nouvelle = new Commande();
 		// On définit au moins les propriétés non NULL
 		nouvelle.setClient(alkfi);
-		nouvelle.setSaisiele(new Date());
+		nouvelle.setSaisiele(LocalDate.now());
 		nouvelle.setRemise(BigDecimal.ZERO);
 				
 		// On crée deux lignes pour la nouvelle commande
-		Ligne l1 = new Ligne(nouvelle, syrup, (short)4);
-		Ligne l2 = new Ligne(nouvelle, chang, (short)10);
+		Ligne l1 = new Ligne(nouvelle, syrup, 4);
+	
+		Ligne l2 = new Ligne(nouvelle, chang, 99);
 		
 		ArrayList<Ligne> lignes = new ArrayList<>();
 		lignes.add(l1); lignes.add(l2);
 
 		// On ajoute les deux lignes à la commande
-		nouvelle.setLigneList(lignes);
+		nouvelle.setLignes(lignes);
 
 		// On enregistre la commande (provoque l'enregistrement des lignes)
 		daoCommande.save(nouvelle);
 				
 		// On regarde si ça s'est bien passé
 		assertEquals(5, daoLigne.count(),   "Il doit y avoir 5 lignes en tout");
-		assertEquals(3, chang.getLigneList().size(), "Il doit y avoir 3 lignes pour le produit 'Chang')");
-		assertEquals(2, syrup.getLigneList().size(), "Il doit y avoir 2 lignes pour le produit 'Syrup')");
-		assertTrue(chang.getLigneList().contains(l2), "La nouvelle ligne doit avoir été ajoutée au produit 'chang'");
-		assertTrue(syrup.getLigneList().contains(l1), "La nouvelle ligne doit avoir été ajoutée au produit 'syrup'");		
+		assertEquals(3, chang.getLignes().size(), "Il doit y avoir 3 lignes pour le produit 'Chang')");
+		assertEquals(2, syrup.getLignes().size(), "Il doit y avoir 2 lignes pour le produit 'Syrup')");
+		assertTrue(chang.getLignes().contains(l2), "La nouvelle ligne doit avoir été ajoutée au produit 'chang'");
+		assertTrue(syrup.getLignes().contains(l1), "La nouvelle ligne doit avoir été ajoutée au produit 'syrup'");		
 	}
 	
 	@Test
@@ -90,18 +91,18 @@ class CommandeRepositoryTest {
 		Commande nouvelle = new Commande();
 		// On définit au moins les propriétés non NULL
 		nouvelle.setClient(alkfi);
-		nouvelle.setSaisiele(new Date());
-		nouvelle.setRemise(BigDecimal.ZERO);
 				
 		// On crée deux lignes pour la nouvelle commande avec le même produit
-		Ligne l1 = new Ligne(nouvelle, chang, (short)4);
-		Ligne l2 = new Ligne(nouvelle, chang, (short)10);
+		Ligne l1 = new Ligne(nouvelle, chang);
+		l1.setQuantite(4);
+		Ligne l2 = new Ligne(nouvelle, chang);
+		l2.setQuantite(10);
 		
 		ArrayList<Ligne> lignes = new ArrayList<>();
 		lignes.add(l1); lignes.add(l2);
 
 		// On ajoute les deux lignes à la commande
-		nouvelle.setLigneList(lignes);
+		nouvelle.setLignes(lignes);
 
 		try { // La création de la commande doit produire une erreur
 			daoCommande.save(nouvelle);
@@ -118,7 +119,7 @@ class CommandeRepositoryTest {
 		long nombreDeLignes = daoLigne.count(); // Combien de lignes en tout ?
 		logger.debug("Supression de lignes dans une commande");
 		Commande c = daoCommande.getOne(10331); // Cette commande a 2 lignes
-		c.getLigneList().remove(1); // On supprime la dernière ligne
+		c.getLignes().remove(1); // On supprime la dernière ligne
 		daoCommande.save(c); // On l'enregistre (provoque la suppression de la ligne)
 		assertEquals(nombreDeLignes - 1, daoLigne.count(), "On doit avoir supprimé une ligne");
 	}
@@ -128,8 +129,8 @@ class CommandeRepositoryTest {
 	void onPeutModifierDesLignesDansUneCommande() {
 		logger.debug("Modification des lignes d'une commande");
 		Commande c = daoCommande.getOne(10331); // Cette commande a 2 lignes
-		Ligne l = c.getLigneList().get(1); // On prend la deuxième
-		l.setQuantite((short)99);; // On la modifie
+		Ligne l = c.getLignes().get(1); // On prend la deuxième
+		l.setQuantite(99);; // On la modifie
 		daoCommande.save(c); // On enregistre la commande (provoque la modification de la ligne)
 		assertEquals(3, daoLigne.count(), "Il doit rester 3 lignes en tout");
 	}

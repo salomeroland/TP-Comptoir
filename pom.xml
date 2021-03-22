@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.3.0.RELEASE</version>
+		<version>2.3.4.RELEASE</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>io.github.bastide</groupId>
@@ -15,8 +15,16 @@
 	<description>Exemples Spring JPA sur la base "comptoirs"</description>
 
 	<properties>
-		<java.version>1.8</java.version>
+		<java.version>14</java.version>
 	</properties>
+
+	<distributionManagement>
+		<repository>
+		  <id>github</id>
+		  <name>GitHub Apache Maven Packages</name>
+		  <url>https://github.com/bastide/packages</url>
+		</repository>
+	  </distributionManagement>
 
 	<dependencies>
 		<dependency>
@@ -56,6 +64,13 @@
 			<groupId>com.fasterxml.jackson.module</groupId>
 			<artifactId>jackson-module-jaxb-annotations</artifactId>
 		</dependency>
+		<!-- Lombok pour générer automatiquement les getter / setter...  -->
+		<!-- cf. https://examples.javacodegeeks.com/spring-boot-with-lombok/ -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>

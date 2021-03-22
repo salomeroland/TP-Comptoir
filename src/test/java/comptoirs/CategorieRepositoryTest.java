@@ -26,14 +26,14 @@ class CategorieRepositoryTest {
 	private final ObjectMapper mapper = new ObjectMapper();
 
 	@Autowired
-	private CategorieRepository dao;
+	private CategorieRepository categoryDAO;
 
 	@Test
 	@Sql("small_data.sql")
 	void compterLesEntites() {
 		logger.debug("Compter les entités");
 
-		long nombre = dao.count(); // 'count' donne le nombre d'enregistrements
+		long nombre = categoryDAO.count(); // 'count' donne le nombre d'enregistrements
 
 		assertEquals(2, nombre, "Le jeu de test contient 2 catégories");
 	}
@@ -43,25 +43,27 @@ class CategorieRepositoryTest {
 	void listerLesEntites() throws JsonProcessingException {
 		logger.debug("Lister les entités");
 
-		List<Categorie> liste = dao.findAll(); // Renvoie la liste des entités dans la table
+		List<Categorie> liste = categoryDAO.findAll(); // Renvoie la liste des entités dans la table
 
-		logger.debug("Liste des entités: " + mapper.writeValueAsString(liste));
+		assertFalse(liste.isEmpty(), "Il y a des catégories dans le jeu de test");
+
+		logger.debug("Liste des entités: {}", mapper.writeValueAsString(liste));
 	}
 	
 	@Test
 	@Sql("small_data.sql")
 	void listerCustomQuery() throws JsonProcessingException {
-		logger.debug("Chercher des entités avec une requête Spring");
+		logger.debug("Chercher des entités avec une requête 'custom' Spring");
 		
 		String substring = "on";
 
-		List<Categorie> liste = dao.findByLibelleContaining(substring);
-		logger.info("Entités trouvées : " + mapper.writeValueAsString(liste));
+		List<Categorie> liste = categoryDAO.findByLibelleContaining(substring);
+		logger.info("Entités trouvées: {}", mapper.writeValueAsString(liste));
 		
-		assertEquals(liste.size(), 2, "I y a deux catégories dont le libéllé contient la sous-chaine");
+		assertEquals(2, liste.size(), "Il y a deux catégories dont le libellé contient la sous-chaine");
 		
 		substring = "xx";
-		assertTrue(dao.findByLibelleContaining(substring).isEmpty(), "Aucun libellé de catégorie ne contient cette sous-chaine"); 	
+		assertTrue(categoryDAO.findByLibelleContaining(substring).isEmpty(), "Aucun libellé de catégorie ne contient cette sous-chaine"); 	
 	}
 	
 	@Test
@@ -70,22 +72,22 @@ class CategorieRepositoryTest {
 		logger.debug("Trouver une entité par sa clé");
 
 		int codePresent = 1;
-		Optional<Categorie> resultat = dao.findById(codePresent);
+		Optional<Categorie> resultat = categoryDAO.findById(codePresent);
 		// On s'assure qu'on trouvé le résultat
 		assertTrue(resultat.isPresent(), "Cette catégorie existe");
 		Categorie c = resultat.get();
 		assertEquals("Boissons", c.getLibelle());
 
-		logger.debug("Entité trouvée : " + mapper.writeValueAsString(c));
+		logger.debug("Entité trouvée: {}", mapper.writeValueAsString(c));
 	}
 
 	@Test
 	@Sql("small_data.sql")
-	void entiteInconnue() throws JsonProcessingException {
+	void entiteInconnue()  {
 		logger.debug("Chercher une entité inconnue");
 		int codeInconnu = 99;
 
-		Optional<Categorie> resultat = dao.findById(codeInconnu);
+		Optional<Categorie> resultat = categoryDAO.findById(codeInconnu);
 
 		assertFalse(resultat.isPresent(), "Cette catégorie n'existe pas");
 
@@ -99,10 +101,10 @@ class CategorieRepositoryTest {
 		nouvelle.setLibelle("essai");
 		nouvelle.setDescription("essai");
 		assertNull(nouvelle.getCode(), "L'entité n'a pas encore de clé");
-		dao.save(nouvelle); // 'save' enregistre l'entite dans la base
+		categoryDAO.save(nouvelle); // 'save' enregistre l'entite dans la base
 		Integer nouvellecle = nouvelle.getCode(); // La clé a été auto-générée lors de l'enregistrement
 		assertNotNull(nouvellecle, "Une nouvelle clé doit avoir été générée");
-		logger.debug("Nouvelle entités " + mapper.writeValueAsString(nouvelle));
+		logger.debug("Nouvelle entité: {}", mapper.writeValueAsString(nouvelle));
 	}
 
 	@Test
@@ -113,14 +115,14 @@ class CategorieRepositoryTest {
 		int codePresent = 1;
 		String ancienLibelle = "Boissons";
 		String nouveauLibelle = "Libellé modifié";
-		Categorie c = dao.getOne(codePresent); // On peut utiliser getOne si on est sur qu'elle existe
+		Categorie c = categoryDAO.getOne(codePresent); // On peut utiliser getOne si on est sur qu'elle existe
 		assertEquals(ancienLibelle, c.getLibelle());
 		// On change l'entité
 		c.setLibelle(nouveauLibelle);
 		// On l'enregistre dans la base
-		dao.save(c);
+		categoryDAO.save(c);
 		// On vérifie que l'enregistrement s'est bien passé
-		Categorie recherche = dao.findByLibelle(nouveauLibelle);
+		Categorie recherche = categoryDAO.findByLibelle(nouveauLibelle);
 		assertEquals(codePresent, recherche.getCode(), "La catégorie doit avoir été modifiée");
 	}
 
@@ -132,7 +134,7 @@ class CategorieRepositoryTest {
 		nouvelle.setLibelle("Boissons");  // Ce libellé existe dans le jeu de test
 		nouvelle.setDescription("essai");
 		try { // L'enregistreement peut générer des exceptions (ex : violation de contrainte d'intégrité)
-			dao.save(nouvelle);
+			categoryDAO.save(nouvelle);
 			fail("Les libellés doivent être tous distincts, on doit avoir une exception");
 		} catch (DataIntegrityViolationException e) {
 			// Si on arrive ici c'est normal, on a eu l'exception attendue
@@ -145,16 +147,15 @@ class CategorieRepositoryTest {
 	@Sql("small_data.sql")
 	void onNePeutPasDetruireUneCategorieQuiADesProduits() {
 		logger.debug("Détruire une catégorie avec des produits");
-		Categorie boissons = dao.getOne(1);
+		Categorie boissons = categoryDAO.getOne(1);
 		assertEquals("Boissons", boissons.getLibelle());
 		// Il y a des produits dans la catégorie 'Boissons'
-		assertFalse(boissons.getProduitList().isEmpty());
+		assertFalse(boissons.getProduits().isEmpty());
 		// Si on essaie de détruire cette catégorie, on doit avoir une exception
 		// de violation de contrainte d'intégrité
 		assertThrows(DataIntegrityViolationException.class, () -> {
-			dao.delete(boissons);
-			dao.flush();
+			categoryDAO.delete(boissons);
+			categoryDAO.flush();
 		});
 	}
-
 }

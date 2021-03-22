@@ -1,29 +1,37 @@
 package comptoirs.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
 @Entity
-@Table(uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"COMMANDE", "PRODUIT"})})
+@Table(
+	// On fait une contrainte d'unicité sur les 2 clés étrangères
+	// plutôt que de faire une clé composite
+	uniqueConstraints = {
+		@UniqueConstraint(columnNames = {"COMMANDE_NUMERO", "PRODUIT_REFERENCE"})
+	}
+)
 @XmlRootElement
-@NamedQueries({
-	@NamedQuery(name = "Ligne.findAll", query = "SELECT l FROM Ligne l"),
-	@NamedQuery(name = "Ligne.findById", query = "SELECT l FROM Ligne l WHERE l.id = :id"),
-	@NamedQuery(name = "Ligne.findByQuantite", query = "SELECT l FROM Ligne l WHERE l.quantite = :quantite")})
+// Lombok
+@Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
 public class Ligne implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -34,55 +42,19 @@ public class Ligne implements Serializable {
 	@Column(nullable = false)
 	private Integer id;
 
-	@Basic(optional = false)
-	@NotNull
-	@Column(nullable = false)
-	private short quantite;
-
-	@JoinColumn(name = "COMMANDE", referencedColumnName = "NUMERO", nullable = false)
 	@ManyToOne(optional = false)
+	@NonNull
 	private Commande commande;
 
-	@JoinColumn(name = "PRODUIT", referencedColumnName = "REFERENCE", nullable = false)
 	@ManyToOne(optional = false)
+	@NonNull
 	private Produit produit;
 
-	public Ligne() {
-	}
-
-	public Ligne(Commande c, Produit p, short quantite) {
-		this.commande = c;
-		this.produit = p;
-		this.quantite = quantite;
-	}
-	
-	public Integer getId() {
-		return id;
-	}
-
-	public short getQuantite() {
-		return quantite;
-	}
-
-	public void setQuantite(short quantite) {
-		this.quantite = quantite;
-	}
-
-	public Commande getCommande() {
-		return commande;
-	}
-
-	public void setCommande(Commande commande) {
-		this.commande = commande;
-	}
-
-	public Produit getProduit() {
-		return produit;
-	}
-
-	public void setProduit(Produit produit) {
-		this.produit = produit;
-	}
+	@Basic(optional = false)
+	@NonNull // lombok
+	@NotNull // Java validation
+	@Column(nullable = false)
+	private Integer quantite;
 
 	@Override
 	public int hashCode() {
@@ -93,20 +65,10 @@ public class Ligne implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof Ligne)) {
 			return false;
 		}
 		Ligne other = (Ligne) object;
-		if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-			return false;
-		}
-		return true;
+		return (this.id == null && other.id == null) || (this.id != null && this.id.equals(other.id));
 	}
-
-	@Override
-	public String toString() {
-		return "comptoirs.entity.Ligne[ id=" + id + " ]";
-	}
-
 }

@@ -1,8 +1,8 @@
 package comptoirs.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,93 +10,49 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 @Entity
-@XmlRootElement
-@Table(uniqueConstraints = {
-	@UniqueConstraint(columnNames = {"LIBELLE"})})
-@NamedQueries({
-	@NamedQuery(name = "Categorie.findAll", query = "SELECT c FROM Categorie c"),
-	@NamedQuery(name = "Categorie.findByCode", query = "SELECT c FROM Categorie c WHERE c.code = :code"),
-	@NamedQuery(name = "Categorie.findByLibelle", query = "SELECT c FROM Categorie c WHERE c.libelle = :libelle"),
-	@NamedQuery(name = "Categorie.findByDescription", query = "SELECT c FROM Categorie c WHERE c.description = :description")})
+// Lombok
+@Getter @Setter @NoArgsConstructor @RequiredArgsConstructor @ToString
+@XmlRootElement // Pour générer du XML
 public class Categorie implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Basic(optional = false)
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
 	private Integer code;
 
 	@Basic(optional = false)
-	@NotNull
+	@NonNull // lombok
+	@NotNull // Java validation
 	@Size(min = 1, max = 25)
-	@Column(nullable = false, length = 25)
+	// Spécifications de la colonne dans la table relationnelle
+	@Column(nullable = false, unique = true, length = 25)
 	private String libelle;
 
 	@Size(max = 255)
 	@Column(length = 255)
 	private String description;
 
+	@JsonIgnore // Ne pas inclure dans le format JSON
+	@XmlTransient  // Ne pas inclure dans le format XML
+	@ToString.Exclude  // Ne pas inclure dans le toString
 	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "categorie")
-	private List<Produit> produitList;
-
-	public Categorie() {
-	}
-
-	public Categorie(Integer code) {
-		this.code = code;
-	}
-
-	public Categorie(Integer code, String libelle) {
-		this.code = code;
-		this.libelle = libelle;
-	}
-
-	public Integer getCode() {
-		return code;
-	}
-
-	public void setCode(Integer code) {
-		this.code = code;
-	}
-
-	public String getLibelle() {
-		return libelle;
-	}
-
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	@JsonIgnore
-	@XmlTransient
-	public List<Produit> getProduitList() {
-		return produitList;
-	}
-
-	public void setProduitList(List<Produit> produitList) {
-		this.produitList = produitList;
-	}
+	private List<Produit> produits;
 
 	@Override
 	public int hashCode() {
@@ -107,20 +63,10 @@ public class Categorie implements Serializable {
 
 	@Override
 	public boolean equals(Object object) {
-		// TODO: Warning - this method won't work in the case the id fields are not set
 		if (!(object instanceof Categorie)) {
 			return false;
 		}
 		Categorie other = (Categorie) object;
-		if ((this.code == null && other.code != null) || (this.code != null && !this.code.equals(other.code))) {
-			return false;
-		}
-		return true;
+		return (this.code == null && other.code == null) || (this.code != null && this.code.equals(other.code));
 	}
-
-	@Override
-	public String toString() {
-		return "comptoirs.entity.Categorie[ code=" + code + " ]";
-	}
-
 }

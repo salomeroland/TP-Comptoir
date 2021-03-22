@@ -1,27 +1,27 @@
 package comptoirs;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.io.IOException;
+import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
-import comptoirs.dao.*;
+import comptoirs.dao.ProduitRepository;
 import comptoirs.dto.UnitesParProduit;
-import java.io.IOException;
-import java.util.List;
-import javax.persistence.Tuple;
 
 @DataJpaTest
 class ProduitRepositoryTest {
 	Logger logger = LoggerFactory.getLogger(ProduitRepositoryTest.class);
 
-	// Pour générer du JSON
+	// Pour afficher du JSON dans les logs
 	private final ObjectMapper mapper = new ObjectMapper();		
 
 	@Autowired 
