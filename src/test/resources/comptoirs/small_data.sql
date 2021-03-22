@@ -18,12 +18,12 @@ INSERT INTO Client(code, societe, contact, fonction, adresse, ville, region, cod
 -- Un client avec deux commandes
 INSERT INTO Client(code, societe, contact, fonction, adresse, ville, region, code_postal, pays, telephone, fax) VALUES 
     ( 'BONAP', 'Bon app''', 'Laurence Lebihan', 'Propriétaire', '12, rue des Bouchers', 'Marseille', NULL, '13008', 'France', '91.24.45.40', '91.24.45.41');
-INSERT INTO Commande(numero, client_code, saisiele, envoyeele, port, destinataire, adresse_livraison, ville_livraison, region_livraison, code_postal_livraison, pays_livraison, remise) VALUES 
+INSERT INTO Commande(numero, client_code, saisiele, envoyeele, port, destinataire, adresse, ville, region, code_postal, pays, remise) VALUES 
     ( 10331, 'BONAP', '1994-11-16', '1994-11-21', 50.00, 'Bon app''', '12, rue des Bouchers', 'Marseille', NULL, '13008', 'France', 0.00);
 INSERT INTO Ligne(commande_numero, produit_reference, quantite) VALUES ( 10331, 2, 15);
 INSERT INTO Ligne(commande_numero, produit_reference, quantite) VALUES ( 10331, 3, 10);
 
-INSERT INTO Commande(numero, client_code, saisiele, envoyeele, port, destinataire, adresse_livraison, ville_livraison, region_livraison, code_postal_livraison, pays_livraison, remise) VALUES
+INSERT INTO Commande(numero, client_code, saisiele, envoyeele, port, destinataire, adresse, ville, region, code_postal, pays, remise) VALUES
     ( 10340, 'BONAP', '1994-11-29', '1994-12-09', 831.00, 'Bon app''', '12, rue des Bouchers', 'Marseille', NULL, '13008', 'France', 0.00);
 INSERT INTO Ligne(commande_numero, produit_reference, quantite) VALUES ( 10340, 2, 20);
 

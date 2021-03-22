@@ -93,10 +93,8 @@ class CommandeRepositoryTest {
 		nouvelle.setClient(alkfi);
 				
 		// On crée deux lignes pour la nouvelle commande avec le même produit
-		Ligne l1 = new Ligne(nouvelle, chang);
-		l1.setQuantite(4);
-		Ligne l2 = new Ligne(nouvelle, chang);
-		l2.setQuantite(10);
+		Ligne l1 = new Ligne(nouvelle, chang, 4);
+		Ligne l2 = new Ligne(nouvelle, chang, 10);
 		
 		ArrayList<Ligne> lignes = new ArrayList<>();
 		lignes.add(l1); lignes.add(l2);

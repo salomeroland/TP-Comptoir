@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -54,25 +55,7 @@ public class Commande implements Serializable {
 	@Column(length = 40)
 	private String destinataire;
 
-	@Size(max = 60)
-	@Column(length = 60)
-	private String adresseLivraison;
-
-	@Size(max = 15)
-	@Column(length = 15)
-	private String villeLivraison;
-
-	@Size(max = 15)
-	@Column(length = 15)
-	private String regionLivraison;
-
-	@Size(max = 10)
-	@Column(length = 10)
-	private String codePostalLivraison;
-
-	@Size(max = 15)
-	@Column(length = 15)
-	private String paysLivraison;
+	@Embedded AdressePostale adresseLivraison;
 
 	@Basic(optional = false)
 	@NotNull

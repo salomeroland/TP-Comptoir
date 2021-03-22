@@ -103,7 +103,7 @@ INSERT INTO Client(code, societe, contact, fonction, adresse, ville, region, cod
 
 
 
-INSERT INTO Commande(numero, client_code, saisiele, envoyeele, port, destinataire, adresse_livraison, ville_livraison, region_livraison, code_postal_livraison, pays_livraison, remise) VALUES 
+INSERT INTO Commande(numero, client_code, saisiele, envoyeele, port, destinataire, adresse, ville, region, code_postal, pays, remise) VALUES 
     ( 10248, 'VINET', '1994-08-04', '1994-08-16', 161.00, 'Vins et alcools Chevalier', '59 rue de l''Abbaye', 'Reims', NULL, '51100', 'France', 0.00),
 	( 10249, 'TOMSP', '1994-08-05', '1994-08-10', 58.00, 'Toms Spezialitäten', 'Luisenstr. 48', 'Münster', NULL, '44087', 'Allemagne', 0.00),
 	( 10250, 'HANAR', '1994-08-08', '1994-08-12', 329.00, 'Hanari Carnes', 'Rua do Paço, 67', 'Rio de Janeiro', 'RJ', '05454-876', 'Brésil', 0.00),
