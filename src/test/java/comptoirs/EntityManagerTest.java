@@ -1,33 +1,28 @@
 package comptoirs;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import comptoirs.dao.ProduitRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-
-
-import comptoirs.entity.Categorie;
-import comptoirs.entity.Produit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.test.context.jdbc.Sql;
 
+import comptoirs.dao.ProduitRepository;
+import comptoirs.entity.Categorie;
+import comptoirs.entity.Produit;
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2 // Génère le 'logger' pour afficher les messages de trace
 @DataJpaTest
 public class EntityManagerTest {
-	Logger logger = LoggerFactory.getLogger(EntityManagerTest.class);
-	
-	// Pour produire du JSON
-	ObjectMapper mapper = new ObjectMapper();
 	
 	@Autowired 
 	ProduitRepository dao;
@@ -38,7 +33,7 @@ public class EntityManagerTest {
 	@Test
 	@Sql("small_data.sql")		
 	public void testCreationCategorieAvecProduits() {
-		logger.debug("Création catégorie avec produits");
+		log.info("Création catégorie avec produits");
 		long produitsAvant = dao.count();
 		Categorie cat = new Categorie();
 		cat.setDescription("logiciel");
@@ -53,7 +48,7 @@ public class EntityManagerTest {
 		produits.add(p1);
 		produits.add(p2);
 		cat.setProduits(produits);
-		logger.info("On enregistre la catégorie et ses 2 produits");
+		log.info("On enregistre la catégorie et ses 2 produits");
 		em.persist(cat);
 		long produitsAprès = dao.count();
 		assertEquals(produitsAvant + 2, produitsAprès, 
@@ -64,7 +59,7 @@ public class EntityManagerTest {
 	@Test
 	@Sql("small_data.sql")		
 	public void testRechercheCategorieAvecProduits() throws JsonProcessingException {
-		logger.debug("Recherche catégorie avec produits");
+		log.info("Recherche catégorie avec produits");
 		// Recherche par clé
 		Categorie cat = em.find(Categorie.class, 1);
 		List<Produit> produits = cat.getProduits();

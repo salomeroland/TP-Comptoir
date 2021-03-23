@@ -8,20 +8,41 @@ import comptoirs.entity.Produit;
 import comptoirs.dto.UnitesParProduit;
 
 // Cette interface sera auto-implémentée par Spring
-
 public interface ProduitRepository extends JpaRepository<Produit, Integer> {
+	/**
+	 * Trouve les produits à partir du libellé de la categorie
+	 * version JPQL
+	 * @param libelleDeCategorie le libellé à chercher
+	 * @return les produits de cette catégorie
+	 */	
+	@Query("SELECT p "
+		+ "FROM Produit p "
+		+ "WHERE p.categorie.libelle = :libelleDeCategorie")
+	public List<Produit> produitsPourCategorieJPQL(String libelleDeCategorie);
+
+	/**
+	 * Trouve les produits à partir du libellé de la categorie
+	 * version SQL
+	 * @param libelleDeCategorie le libellé à chercher
+	 * @return les produits de cette catégorie
+	 */	
+	@Query(value = "SELECT * "
+		+ "FROM Produit "
+		+ "INNER JOIN Categorie ON Produit.categorie_code = Categorie.code "
+		+ "WHERE Categorie.libelle = :libelleDeCategorie",
+		nativeQuery = true)
+	public List<Produit> produitsPourCategorieSQL(String libelleDeCategorie);
+
 	/**
 	 * Calcule le nombre d'unités vendues pour chaque produit d'une catégorie donnée.
 	 * @param codeCategorie la catégorie à traiter
 	 * @return le nombre d'unités vendus pour chaque produit, 
 	 *		sous la forme d'une liste de DTO UnitesParProduit
 	 */	
-	@Query("SELECT p.nom as nom, SUM(li.quantite) AS unites "
-		+ "FROM Categorie c "
-		+ "JOIN c.produits p "
-		+ "JOIN p.lignes li "
-		+ "WHERE c.code = :codeCategorie "
-		+ "GROUP BY p.nom ")
+	@Query("SELECT ligne.produit.nom as nom, SUM(ligne.quantite) AS unites "
+		+ "FROM Ligne ligne "
+		+ "WHERE ligne.produit.categorie.code = :codeCategorie "
+		+ "GROUP BY nom ")
 	public List<UnitesParProduit> produitsVendusPour(Integer codeCategorie);
 	
 	/**

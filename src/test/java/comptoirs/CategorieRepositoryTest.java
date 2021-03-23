@@ -1,10 +1,19 @@
 package comptoirs;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.util.List;
+import java.util.Optional;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -12,26 +21,18 @@ import org.springframework.test.context.jdbc.Sql;
 
 import comptoirs.dao.CategorieRepository;
 import comptoirs.entity.Categorie;
-import java.util.List;
-import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2 // Génère le 'logger' pour afficher les messages de trace
 @DataJpaTest
 class CategorieRepositoryTest {
-
-	Logger logger = LoggerFactory.getLogger(CategorieRepositoryTest.class);
-
-	// Pour générer du JSON
-	private final ObjectMapper mapper = new ObjectMapper();
-
 	@Autowired
 	private CategorieRepository categoryDAO;
 
 	@Test
 	@Sql("small_data.sql")
 	void compterLesEntites() {
-		logger.debug("Compter les entités");
+		log.info("Compter les entités");
 
 		long nombre = categoryDAO.count(); // 'count' donne le nombre d'enregistrements
 
@@ -41,24 +42,24 @@ class CategorieRepositoryTest {
 	@Test
 	@Sql("small_data.sql")
 	void listerLesEntites() throws JsonProcessingException {
-		logger.debug("Lister les entités");
+		log.info("Lister les entités");
 
 		List<Categorie> liste = categoryDAO.findAll(); // Renvoie la liste des entités dans la table
 
 		assertFalse(liste.isEmpty(), "Il y a des catégories dans le jeu de test");
 
-		logger.debug("Liste des entités: {}", mapper.writeValueAsString(liste));
+		log.info("Liste des entités: {}", liste);
 	}
 	
 	@Test
 	@Sql("small_data.sql")
 	void listerCustomQuery() throws JsonProcessingException {
-		logger.debug("Chercher des entités avec une requête 'custom' Spring");
+		log.info("Chercher des entités avec une requête 'custom' Spring");
 		
 		String substring = "on";
 
 		List<Categorie> liste = categoryDAO.findByLibelleContaining(substring);
-		logger.info("Entités trouvées: {}", mapper.writeValueAsString(liste));
+		log.info("Entités trouvées: {}", liste);
 		
 		assertEquals(2, liste.size(), "Il y a deux catégories dont le libellé contient la sous-chaine");
 		
@@ -69,7 +70,7 @@ class CategorieRepositoryTest {
 	@Test
 	@Sql("small_data.sql")
 	void touverParCle() throws JsonProcessingException {
-		logger.debug("Trouver une entité par sa clé");
+		log.info("Trouver une entité par sa clé");
 
 		int codePresent = 1;
 		Optional<Categorie> resultat = categoryDAO.findById(codePresent);
@@ -78,13 +79,13 @@ class CategorieRepositoryTest {
 		Categorie c = resultat.get();
 		assertEquals("Boissons", c.getLibelle());
 
-		logger.debug("Entité trouvée: {}", mapper.writeValueAsString(c));
+		log.info("Entité trouvée: {}", c);
 	}
 
 	@Test
 	@Sql("small_data.sql")
 	void entiteInconnue()  {
-		logger.debug("Chercher une entité inconnue");
+		log.info("Chercher une entité inconnue");
 		int codeInconnu = 99;
 
 		Optional<Categorie> resultat = categoryDAO.findById(codeInconnu);
@@ -96,7 +97,7 @@ class CategorieRepositoryTest {
 	@Test
 	@Sql("small_data.sql")
 	void creerUneEntite() throws JsonProcessingException {
-		logger.debug("Créer une entité");
+		log.info("Créer une entité");
 		Categorie nouvelle = new Categorie();
 		nouvelle.setLibelle("essai");
 		nouvelle.setDescription("essai");
@@ -104,13 +105,13 @@ class CategorieRepositoryTest {
 		categoryDAO.save(nouvelle); // 'save' enregistre l'entite dans la base
 		Integer nouvellecle = nouvelle.getCode(); // La clé a été auto-générée lors de l'enregistrement
 		assertNotNull(nouvellecle, "Une nouvelle clé doit avoir été générée");
-		logger.debug("Nouvelle entité: {}", mapper.writeValueAsString(nouvelle));
+		log.info("Nouvelle entité: {}", nouvelle);
 	}
 
 	@Test
 	@Sql("small_data.sql")
 	void modifierEntite() throws JsonProcessingException {
-		logger.debug("Modifier une entité");
+		log.info("Modifier une entité");
 
 		int codePresent = 1;
 		String ancienLibelle = "Boissons";
@@ -129,7 +130,7 @@ class CategorieRepositoryTest {
 	@Test
 	@Sql("small_data.sql")
 	void erreurCreationEntite() {
-		logger.debug("Créer une entité avec erreur");
+		log.info("Créer une entité avec erreur");
 		Categorie nouvelle = new Categorie();
 		nouvelle.setLibelle("Boissons");  // Ce libellé existe dans le jeu de test
 		nouvelle.setDescription("essai");
@@ -146,7 +147,7 @@ class CategorieRepositoryTest {
 	@Test
 	@Sql("small_data.sql")
 	void onNePeutPasDetruireUneCategorieQuiADesProduits() {
-		logger.debug("Détruire une catégorie avec des produits");
+		log.info("Détruire une catégorie avec des produits");
 		Categorie boissons = categoryDAO.getOne(1);
 		assertEquals("Boissons", boissons.getLibelle());
 		// Il y a des produits dans la catégorie 'Boissons'

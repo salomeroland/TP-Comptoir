@@ -2,7 +2,9 @@ package comptoirs.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
+
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -10,19 +12,21 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
 // Lombok
@@ -80,8 +84,11 @@ public class Produit implements Serializable {
 	@Column(nullable = false)
 	private short indisponible;
 
+	@JsonIgnore // Ne pas inclure dans le format JSON
+	@XmlTransient  // Ne pas inclure dans le format XML
+	@ToString.Exclude  // Ne pas inclure dans le toString	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "produit")
-	private List<Ligne> lignes;
+	private List<Ligne> lignes  = new LinkedList<>();
 
 	@ManyToOne(optional = false)
 	private Categorie categorie;

@@ -1,6 +1,7 @@
 package comptoirs.entity;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -52,7 +53,7 @@ public class Categorie implements Serializable {
 	@XmlTransient  // Ne pas inclure dans le format XML
 	@ToString.Exclude  // Ne pas inclure dans le toString
 	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "categorie")
-	private List<Produit> produits;
+	private List<Produit> produits = new LinkedList<>();
 
 	@Override
 	public int hashCode() {

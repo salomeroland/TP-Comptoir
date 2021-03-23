@@ -3,6 +3,7 @@ package comptoirs.entity;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -66,7 +67,7 @@ public class Commande implements Serializable {
 	@XmlTransient  // Ne pas inclure dans le format XML
 	@ToString.Exclude  // Ne pas inclure dans le toString	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "commande", orphanRemoval = true)
-	private List<Ligne> lignes;
+	private List<Ligne> lignes = new LinkedList<>();
 
 	@ManyToOne(optional = false)
 	private Client client;

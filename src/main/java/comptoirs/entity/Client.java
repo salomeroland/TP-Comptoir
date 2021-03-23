@@ -1,6 +1,7 @@
 package comptoirs.entity;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.Basic;
@@ -71,7 +72,7 @@ public class Client implements Serializable {
 	@XmlTransient  // Ne pas inclure dans le format XML
 	@ToString.Exclude  // Ne pas inclure dans le toString	
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
-	private List<Commande> commandes;
+	private List<Commande> commandes  = new LinkedList<>();
 
 	@Override
 	public int hashCode() {

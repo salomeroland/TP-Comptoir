@@ -24,10 +24,11 @@ import comptoirs.entity.Client;
 import comptoirs.entity.Commande;
 import comptoirs.entity.Ligne;
 import comptoirs.entity.Produit;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2 // Génère le 'logger' pour afficher les messages de trace
 @DataJpaTest
 class CommandeRepositoryTest {
-	Logger logger = LoggerFactory.getLogger(CommandeRepositoryTest.class);
 	
 	@Autowired 
 	private CommandeRepository daoCommande;
@@ -44,7 +45,7 @@ class CommandeRepositoryTest {
 	@Test
 	@Sql("small_data.sql")		
 	void onPeutCreerUneCommandeEtSesLignes() {
-		logger.debug("Création d'une commande avec ses lignes");
+		log.info("Création d'une commande avec ses lignes");
 		// On cherche les infos nécessaires dans le jeu d'essai
 		Produit chang = daoProduit.getOne(2);
 		Produit syrup = daoProduit.getOne(3);
@@ -82,7 +83,7 @@ class CommandeRepositoryTest {
 	@Test
 	@Sql("small_data.sql")		
 	void pasDeuxFoisLeMemeProduitDansUneCommande() {
-		logger.debug("Tentative de création d'une commande avec doublon");	
+		log.info("Tentative de création d'une commande avec doublon");	
 		// On cherche les infos nécessaires dans le jeu d'essai
 		Produit chang = daoProduit.getOne(2);
 		Client alkfi  = daoClient.getOne("ALFKI");
@@ -95,18 +96,16 @@ class CommandeRepositoryTest {
 		// On crée deux lignes pour la nouvelle commande avec le même produit
 		Ligne l1 = new Ligne(nouvelle, chang, 4);
 		Ligne l2 = new Ligne(nouvelle, chang, 10);
-		
-		ArrayList<Ligne> lignes = new ArrayList<>();
-		lignes.add(l1); lignes.add(l2);
 
 		// On ajoute les deux lignes à la commande
-		nouvelle.setLignes(lignes);
+		nouvelle.getLignes().add(l1);
+		nouvelle.getLignes().add(l2);
 
 		try { // La création de la commande doit produire une erreur
 			daoCommande.save(nouvelle);
 			fail("La commande ne doit pas être sauvegardée");
 		} catch (DataIntegrityViolationException e) {
-			logger.debug("La création a échoué : {}", e.getMessage());
+			log.info("La création a échoué : {}", e.getMessage());
 		}
 	}
 
@@ -115,7 +114,7 @@ class CommandeRepositoryTest {
 	// La liste des lignes d'une commandes est annotée par "orphanRemoval=true"
 	void onPeutSupprimerDesLignesDansUneCommande() {
 		long nombreDeLignes = daoLigne.count(); // Combien de lignes en tout ?
-		logger.debug("Supression de lignes dans une commande");
+		log.info("Supression de lignes dans une commande");
 		Commande c = daoCommande.getOne(10331); // Cette commande a 2 lignes
 		c.getLignes().remove(1); // On supprime la dernière ligne
 		daoCommande.save(c); // On l'enregistre (provoque la suppression de la ligne)
@@ -125,7 +124,7 @@ class CommandeRepositoryTest {
 	@Test
 	@Sql("small_data.sql")
 	void onPeutModifierDesLignesDansUneCommande() {
-		logger.debug("Modification des lignes d'une commande");
+		log.info("Modification des lignes d'une commande");
 		Commande c = daoCommande.getOne(10331); // Cette commande a 2 lignes
 		Ligne l = c.getLignes().get(1); // On prend la deuxième
 		l.setQuantite(99);; // On la modifie
