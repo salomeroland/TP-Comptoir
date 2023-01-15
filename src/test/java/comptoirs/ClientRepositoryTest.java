@@ -31,11 +31,11 @@ class ClientRepositoryTest {
 	@Sql("small_data.sql")		
 	void onPeutTrouverUnClientEtSesCommandes() {
 		log.info("Recherche d'un client");
-		// On cherche le client BONAP d'après sa clé
-		Client bonap  = daoClient.getOne("BONAP");
+		// On cherche le client 2COM d'après sa clé
+		Client c  = daoClient.findById("2COM").get();
 		// On vérifie qu'il a des commandes
-		assertFalse(bonap.getCommandes().isEmpty(),
-			"Le client BONAP a des commandes");
+		assertFalse(c.getCommandes().isEmpty(),
+			"Le client a des commandes");
 	}
 	
 	@Test
@@ -45,9 +45,9 @@ class ClientRepositoryTest {
 		// On vérifie qu'au début, on a deux commandes 
 		assertEquals(2, daoCommande.count(), "On doit trouver deux commandes");
 		// On cherche le client BONAP d'après sa clé
-		Client bonap  = daoClient.getOne("BONAP");
+		Client c  = daoClient.findById("2COM").get();
 		// On supprime le client
-		daoClient.delete(bonap);
+		daoClient.delete(c);
 		// On vérifie qu'il ne reste aucune commande
 		assertEquals(0, daoCommande.count(), "On ne doit trouver aucune commandes");
 		// On vérifie qu'il ne reste aucune ligne

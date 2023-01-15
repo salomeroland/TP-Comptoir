@@ -56,7 +56,7 @@ class CategorieRepositoryTest {
 	void listerCustomQuery() throws JsonProcessingException {
 		log.info("Chercher des entités avec une requête 'custom' Spring");
 		
-		String substring = "on";
+		String substring = "prod";
 
 		List<Categorie> liste = categoryDAO.findByLibelleContaining(substring);
 		log.info("Entités trouvées: {}", liste);
@@ -72,12 +72,12 @@ class CategorieRepositoryTest {
 	void touverParCle() throws JsonProcessingException {
 		log.info("Trouver une entité par sa clé");
 
-		int codePresent = 1;
+		int codePresent = 98;
 		Optional<Categorie> resultat = categoryDAO.findById(codePresent);
 		// On s'assure qu'on trouvé le résultat
 		assertTrue(resultat.isPresent(), "Cette catégorie existe");
 		Categorie c = resultat.get();
-		assertEquals("Boissons", c.getLibelle());
+		assertEquals("2prods", c.getLibelle());
 
 		log.info("Entité trouvée: {}", c);
 	}
@@ -86,7 +86,7 @@ class CategorieRepositoryTest {
 	@Sql("small_data.sql")
 	void entiteInconnue()  {
 		log.info("Chercher une entité inconnue");
-		int codeInconnu = 99;
+		int codeInconnu = 9;
 
 		Optional<Categorie> resultat = categoryDAO.findById(codeInconnu);
 
@@ -113,10 +113,10 @@ class CategorieRepositoryTest {
 	void modifierEntite() throws JsonProcessingException {
 		log.info("Modifier une entité");
 
-		int codePresent = 1;
-		String ancienLibelle = "Boissons";
+		int codePresent = 98;
+		String ancienLibelle = "2prods";
 		String nouveauLibelle = "Libellé modifié";
-		Categorie c = categoryDAO.getOne(codePresent); // On peut utiliser getOne si on est sur qu'elle existe
+		Categorie c = categoryDAO.findById(codePresent).get(); 
 		assertEquals(ancienLibelle, c.getLibelle());
 		// On change l'entité
 		c.setLibelle(nouveauLibelle);
@@ -132,7 +132,8 @@ class CategorieRepositoryTest {
 	void erreurCreationEntite() {
 		log.info("Créer une entité avec erreur");
 		Categorie nouvelle = new Categorie();
-		nouvelle.setLibelle("Boissons");  // Ce libellé existe dans le jeu de test
+		String libelleQuiExiste = "0prod"; // Ce libellé existe dans le jeu de test
+		nouvelle.setLibelle(libelleQuiExiste);  
 		nouvelle.setDescription("essai");
 		try { // L'enregistreement peut générer des exceptions (ex : violation de contrainte d'intégrité)
 			categoryDAO.save(nouvelle);
@@ -148,14 +149,15 @@ class CategorieRepositoryTest {
 	@Sql("small_data.sql")
 	void onNePeutPasDetruireUneCategorieQuiADesProduits() {
 		log.info("Détruire une catégorie avec des produits");
-		Categorie boissons = categoryDAO.getOne(1);
-		assertEquals("Boissons", boissons.getLibelle());
+		int codeCategorieAvecDesProduits = 98;
+		Categorie c = categoryDAO.findById(codeCategorieAvecDesProduits).get();
+		assertEquals("2prods", c.getLibelle());
 		// Il y a des produits dans la catégorie 'Boissons'
-		assertFalse(boissons.getProduits().isEmpty());
+		assertFalse(c.getProduits().isEmpty());
 		// Si on essaie de détruire cette catégorie, on doit avoir une exception
 		// de violation de contrainte d'intégrité
 		assertThrows(DataIntegrityViolationException.class, () -> {
-			categoryDAO.delete(boissons);
+			categoryDAO.delete(c);
 			categoryDAO.flush();
 		});
 	}

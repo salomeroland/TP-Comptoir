@@ -6,9 +6,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.persistence.EntityManager;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +56,12 @@ public class EntityManagerTest {
 
 	@Test
 	@Sql("small_data.sql")		
-	public void testRechercheCategorieAvecProduits() throws JsonProcessingException {
+	public void testRechercheCategorieAvecProduits() {
 		log.info("Recherche catégorie avec produits");
 		// Recherche par clé
-		Categorie cat = em.find(Categorie.class, 1);
-		List<Produit> produits = cat.getProduits();
+		Categorie cat = em.find(Categorie.class, 98);
+		var produits = cat.getProduits();
 		// On a chargé également tous les produits de cette catégorie
-		assertEquals(2, produits.size(), "La catégorie 1 a 2 produits dans le jeu de test");
+		assertEquals(2, produits.size(), "La catégorie a 2 produits dans le jeu de test");
 	}
 }
