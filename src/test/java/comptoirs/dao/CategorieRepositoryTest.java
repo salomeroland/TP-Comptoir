@@ -1,4 +1,4 @@
-package comptoirs;
+package comptoirs.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -19,7 +19,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 
-import comptoirs.dao.CategorieRepository;
 import comptoirs.entity.Categorie;
 import lombok.extern.log4j.Log4j2;
 

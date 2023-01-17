@@ -3,8 +3,6 @@ package comptoirs.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import lombok.*;
 
 import java.math.BigDecimal;

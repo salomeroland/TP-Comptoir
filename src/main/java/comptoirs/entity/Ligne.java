@@ -30,6 +30,6 @@ public class Ligne {
 	@Basic(optional = false)
 	@Column(nullable = false)
 	@NonNull
-	private Short quantite;
+	private Integer quantite;
 
 }

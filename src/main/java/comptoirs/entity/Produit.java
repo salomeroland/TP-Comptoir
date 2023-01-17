@@ -28,15 +28,16 @@ public class Produit {
 	private BigDecimal prixUnitaire = BigDecimal.TEN;
 
 	@ToString.Exclude
-	private short unitesEnStock = 0;
+	private int unitesEnStock = 0;
 
 	@ToString.Exclude
-	private short unitesCommandees = 0;
+	private int unitesCommandees = 0;
 
 	@ToString.Exclude
-	private short niveauDeReappro = 0;
+	private int niveauDeReappro = 0;
 
-	private short indisponible = 0;
+	// 0 = FALSE
+	private Boolean indisponible = false;
 
 	@ManyToOne(optional = false)
 	@NonNull

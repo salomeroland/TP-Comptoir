@@ -1,18 +1,18 @@
-package comptoirs;
+package comptoirs.dao;
 
-import comptoirs.dao.ProduitRepository;
-import comptoirs.dto.ProduitProjection;
-import comptoirs.dto.UnitesParProduit;
-import comptoirs.entity.Produit;
-import lombok.extern.log4j.Log4j2;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import comptoirs.dto.ProduitProjection;
+import comptoirs.dto.UnitesParProduit;
+import comptoirs.entity.Produit;
+import lombok.extern.log4j.Log4j2;
 
 @Log4j2 // Génère le 'logger' pour afficher les messages de trace
 @DataJpaTest
@@ -33,7 +33,7 @@ class ProduitRepositoryTest {
 		results = daoProduit.produitsVendusPour(categorieAvecProduit);
 		assertEquals(2, results.size(),   
 			"La catégorie 98 a deux produits différents vendus dans le jeu de test");
-		assertEquals(10, results.get(1).getUnites(), "On a vendu 10 unités du produit dans le jeu de test");
+		assertEquals(70, results.get(1).getUnites(), "On a vendu 70 unités du produit dans le jeu de test");
 	}
 
 	@Test

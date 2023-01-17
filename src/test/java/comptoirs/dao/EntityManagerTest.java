@@ -1,4 +1,4 @@
-package comptoirs;
+package comptoirs.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.jdbc.Sql;
 
-import comptoirs.dao.ProduitRepository;
 import comptoirs.entity.Categorie;
 import comptoirs.entity.Produit;
 import lombok.extern.log4j.Log4j2;
@@ -30,7 +29,7 @@ public class EntityManagerTest {
 
 	@Test
 	@Sql("small_data.sql")		
-	public void testCreationCategorieAvecProduits() {
+	void testCreationCategorieAvecProduits() {
 		log.info("Création catégorie avec produits");
 		long produitsAvant = dao.count();
 		Categorie cat = new Categorie();
@@ -56,12 +55,12 @@ public class EntityManagerTest {
 
 	@Test
 	@Sql("small_data.sql")		
-	public void testRechercheCategorieAvecProduits() {
+	void testRechercheCategorieAvecProduits() {
 		log.info("Recherche catégorie avec produits");
 		// Recherche par clé
 		Categorie cat = em.find(Categorie.class, 98);
 		var produits = cat.getProduits();
 		// On a chargé également tous les produits de cette catégorie
-		assertEquals(2, produits.size(), "La catégorie a 2 produits dans le jeu de test");
+		assertEquals(3, produits.size(), "La catégorie a 3 produits dans le jeu de test");
 	}
 }

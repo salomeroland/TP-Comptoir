@@ -1,25 +1,25 @@
 package comptoirs.service;
 
-import comptoirs.dao.ClientRepository;
-import comptoirs.dao.CommandeRepository;
-import comptoirs.dao.LigneRepository;
-import comptoirs.entity.Commande;
-import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
+
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
+import comptoirs.dao.ClientRepository;
+import comptoirs.dao.CommandeRepository;
+import comptoirs.entity.Commande;
+import jakarta.transaction.Transactional;
 
 @Service
 public class CommandeService {
+    // La couche "Service" utilise la couche "Accès aux données" pour effectuer les traitements
     private final CommandeRepository commandeDao;
-    private final LigneRepository ligneDao;
     private final ClientRepository clientDao;
+    
 
     // @Autowired
     // La couche "Service" utilise la couche "Accès aux données" pour effectuer les traitements
-    public CommandeService(CommandeRepository commandeDao, LigneRepository ligneDao, ClientRepository clientDao) {
+    public CommandeService(CommandeRepository commandeDao, ClientRepository clientDao) {
         this.commandeDao = commandeDao;
-        this.ligneDao = ligneDao;
         this.clientDao = clientDao;
     }
     /**

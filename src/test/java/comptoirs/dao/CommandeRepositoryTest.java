@@ -1,24 +1,19 @@
-package comptoirs;
+package comptoirs.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.jdbc.Sql;
 
-import comptoirs.dao.ClientRepository;
-import comptoirs.dao.CommandeRepository;
-import comptoirs.dao.LigneRepository;
-import comptoirs.dao.ProduitRepository;
 import comptoirs.entity.Client;
 import comptoirs.entity.Commande;
 import comptoirs.entity.Ligne;
@@ -46,9 +41,9 @@ class CommandeRepositoryTest {
 	void onPeutCreerUneCommandeEtSesLignes() {
 		log.info("Création d'une commande avec ses lignes");
 		// On cherche les infos nécessaires dans le jeu d'essai
-		Produit p1 = daoProduit.findById(98).get();
-		Produit p2 = daoProduit.findById(99).get();
-		Client c1  = daoClient.findById("0COM").get();
+		Produit p1 = daoProduit.findById(98).orElseThrow();
+		Produit p2 = daoProduit.findById(99).orElseThrow();
+		Client c1  = daoClient.findById("0COM").orElseThrow();
 
 		// On crée une commande
 		Commande nouvelle = new Commande();
@@ -58,9 +53,9 @@ class CommandeRepositoryTest {
 		nouvelle.setRemise(BigDecimal.ZERO);
 				
 		// On crée deux lignes pour la nouvelle commande
-		Ligne l1 = new Ligne(nouvelle, p1, (short)4);
+		Ligne l1 = new Ligne(nouvelle, p1, 4);
 	
-		Ligne l2 = new Ligne(nouvelle, p2, (short)99);
+		Ligne l2 = new Ligne(nouvelle, p2, 99);
 		
 		ArrayList<Ligne> lignes = new ArrayList<>();
 		lignes.add(l1); lignes.add(l2);
@@ -93,8 +88,8 @@ class CommandeRepositoryTest {
 		nouvelle.setClient(c1);
 				
 		// On crée deux lignes pour la nouvelle commande avec le même produit
-		Ligne l1 = new Ligne(nouvelle, p1, (short) 4);
-		Ligne l2 = new Ligne(nouvelle, p1, (short) 10);
+		Ligne l1 = new Ligne(nouvelle, p1, 4);
+		Ligne l2 = new Ligne(nouvelle, p1, 10);
 
 		// On ajoute les deux lignes à la commande
 		nouvelle.getLignes().add(l1);
@@ -126,7 +121,7 @@ class CommandeRepositoryTest {
 		log.info("Modification des lignes d'une commande");
 		Commande c = daoCommande.findById(99999).get(); // Cette commande a 2 lignes
 		Ligne l = c.getLignes().get(1); // On prend la deuxième
-		l.setQuantite((short)99);; // On la modifie
+		l.setQuantite(99);; // On la modifie
 		daoCommande.save(c); // On enregistre la commande (provoque la modification de la ligne)
 		assertEquals(3, daoLigne.count(), "Il doit rester 3 lignes en tout");
 	}
