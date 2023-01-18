@@ -31,23 +31,4 @@ class LigneServiceTest {
         "La ligne doit être enregistrée, sa clé générée"); 
     }
 
-    @Test
-    void ajouterDesLignesIncrementeLaQuantiteCommandee() {
-        var ligne = service.ajouterLigne(NUMERO_COMMANDE_PAS_LIVREE, REFERENCE_PRODUIT_DISPONIBLE_2, 1);
-        assertEquals(UNITES_COMMANDEES_AVANT + 1, ligne.getProduit().getUnitesCommandees(), "La quantité commandée doit être incrémentée");
-    }
-        
-    @Test
-    void laQuantiteEstPositive() {
-        assertThrows(ConstraintViolationException.class, 
-            () -> service.ajouterLigne(NUMERO_COMMANDE_PAS_LIVREE, REFERENCE_PRODUIT_DISPONIBLE_1, 0),
-            "La quantite d'une ligne doit être positive");
-    }
-
-    @Test
-    void impossibleAjouterDesLignesSiLivre() {
-        assertThrows(IllegalArgumentException.class, 
-            () -> service.ajouterLigne(NUMERO_COMMANDE_DEJA_LIVREE, REFERENCE_PRODUIT_DISPONIBLE_1, 1),
-            "On ne peut pas ajouter de ligne à une commande déjà livrée");
-    }
 }
