@@ -49,4 +49,21 @@ public class CommandeService {
         commandeDao.save(nouvelleCommande);
         return nouvelleCommande;
     }
+
+    /**
+     * Service métier : Enregistre l'expédition d'une commande connue par sa clé
+     * Règles métier :
+     * - la commande doit exister
+     * - la commande ne doit pas être déjà envoyée (le champ 'envoyeele' doit être null)
+     * - On met à jour la date d'expédition (envoyeele) avec la date du jour
+     * - Pour chaque produit commandé, décrémente la quantité en stock (Produit.unitesEnStock)
+     *   de la quantité commandée
+     * @param commandeNum la clé de la commande
+     * @return la commande mise à jour
+     */
+    @Transactional
+    public Commande enregistreExpédition(Integer commandeNum) {
+        // TODO : implémenter ce service métier
+        throw new UnsupportedOperationException("Pas encore implémenté");
+    }
 }

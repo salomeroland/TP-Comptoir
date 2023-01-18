@@ -1,17 +1,16 @@
 package comptoirs.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import java.math.BigDecimal;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 @SpringBootTest
  // Ce test est basé sur le jeu de données dans "test_data.sql"
- 
 class CommandeServiceTest {
     private static final String ID_PETIT_CLIENT = "0COM";
     private static final String ID_GROS_CLIENT = "2COM";
@@ -20,11 +19,10 @@ class CommandeServiceTest {
 
     @Autowired
     private CommandeService service;
-
     @Test
     void testCreerCommandePourGrosClient() {
         var commande = service.creerCommande(ID_GROS_CLIENT);
-        assertNotNull(commande.getNumero());
+        assertNotNull(commande.getNumero(), "On doit avoir la clé de la commande");
         assertEquals(REMISE_POUR_GROS_CLIENT, commande.getRemise(),
             "Une remise de 15% doit être appliquée pour les gros clients");
     }

@@ -32,7 +32,7 @@ public class Commande {
 
 	@Basic(optional = true)
 	@ToString.Exclude
-	private LocalDate envoyeele;
+	private LocalDate envoyeele = null;
 
 	// @Max(value=?) @Min(value=?)//if you know range of your decimal fields
 	// consider using these annotations to enforce field validation

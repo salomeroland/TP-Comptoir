@@ -8,11 +8,11 @@ INSERT INTO Categorie(code, libelle, description) VALUES
     ( 99, '0prod', 'Cette catégorie n''a pas de produit');
 
 INSERT INTO Produit(reference, nom, fournisseur, categorie_code, quantite_par_unite, prix_unitaire, unites_en_stock, unites_commandees, niveau_de_reappro, indisponible ) VALUES
-    ( 93, 'Produit 93 jamais commandé , disponibe', 1, 98, '', 10.00, 100, 0, 10, FALSE), 
-    ( 94, 'Produit 94 jamais commandé, disponibe', 1, 98, '', 10.00, 100, 0, 10, FALSE), 
-    ( 95, 'Produit 95 jamais commandé, disponibe', 1, 98, '', 10.00, 100, 0, 10, FALSE), 
-    ( 96, 'Produit 96 jamais commandé, disponibe', 1, 98, '', 10.00, 100, 0, 10, FALSE), 
-    ( 97, 'Produit 97 jamais commandé, indisponibe', 1, 98, '', 10.00, 100, 0, 10, TRUE), 
+    ( 93, 'Produit 93 jamais commandé , disponible', 1, 98, '', 10.00, 100, 0, 10, FALSE),
+    ( 94, 'Produit 94 jamais commandé, disponible', 1, 98, '', 10.00, 100, 0, 10, FALSE),
+    ( 95, 'Produit 95 jamais commandé, disponible', 1, 98, '', 10.00, 100, 0, 10, FALSE),
+    ( 96, 'Produit 96 jamais commandé, disponible', 1, 98, '', 10.00, 100, 0, 10, FALSE),
+    ( 97, 'Produit 97 jamais commandé, indisponible', 1, 98, '', 10.00, 100, 0, 10, TRUE),
     ( 98, 'Produit 98', 1, 98, '24 bouteilles (1 litre)', 95.00, 17, 40, 25, FALSE),
     ( 99, 'Produit 99', 1, 98, '12 bouteilles (550 ml)', 50.00, 13, 70, 25, FALSE);
 
