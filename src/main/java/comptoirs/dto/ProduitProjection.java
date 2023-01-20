@@ -10,5 +10,6 @@ public interface ProduitProjection {
     interface CategorieProjection {
         String getLibelle();
     }
+    //blabla
     CategorieProjection getCategorie();
 }
