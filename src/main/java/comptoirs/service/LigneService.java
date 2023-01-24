@@ -46,8 +46,26 @@ public class LigneService {
 
     @Transactional
     Ligne ajouterLigne(Integer commandeNum, Integer produitRef, @Positive int quantite) {
+        // on verifie que le produit existe
+        var produit = produitDao.findById(produitRef).orElseThrow();
+        // on verifie que la commande existe
+        var commande = commandeDao.findById(commandeNum).orElseThrow();
+        // recuperation du nombre de produit qu'il reste en stock
+        var enStock = produit.getUnitesEnStock();
+        // creation d'une nouvelle ligne de commande
+        var ligne = new Ligne();
+        //on evrifie que la commande n'est pas envoyee  et qu'il reste assez de produit en stock
+        if(commande.getEnvoyeele() == null && quantite > 0 && enStock >= quantite ) {
+            ligne.setCommande(commande);
+            ligne.setProduit(produit);
+            ligne.setQuantite(quantite);
 
-throw new UnsupportedOperationException();
+            produit.setUnitesCommandees(produit.getUnitesCommandees() + quantite);
+        }else {
+            throw new IllegalArgumentException("Aucune ligne n'a été ajoutée");
+        }
+        return ligne;
+
     }
 
 }
